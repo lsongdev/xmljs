@@ -1,6 +1,6 @@
 {
   "name": "xml2",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "simple xml reader and parser",
   "main": "index.js",
   "directories": {
