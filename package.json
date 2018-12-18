@@ -1,6 +1,6 @@
 {
   "name": "xml2",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "simple xml reader and parser",
   "main": "index.js",
   "directories": {
@@ -13,7 +13,12 @@
     "type": "git",
     "url": "git+https://github.com/song940/xmljs.git"
   },
-  "keywords": [],
+  "keywords": [
+    "xml",
+    "xml-parser",
+    "xml-reader",
+    "xml-printer"
+  ],
   "author": "lsong",
   "license": "MIT",
   "bugs": {
