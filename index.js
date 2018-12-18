@@ -13,7 +13,8 @@ class XML extends Transform {
   static async readFile(filename, options = {}){
     const readFile = promisify(fs.readFile);
     const source = await readFile(filename, 'utf8');
-    return XML.read(source, options);
+    const dom = await XML.read(`<root>${source}</root>`, options);
+    return dom.children;
   }
   static serialize(ast, options){
     return printer(ast, options);

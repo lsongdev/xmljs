@@ -1,3 +1,4 @@
+<import src="item.wxml" />
 <view class="question">
   <view class="question-title">
     <text class="question-id">{{ question.I }}</text>
