@@ -9,6 +9,7 @@ const STATES = {
   ATTRIBUTE_NAME_END: 7,
   ATTRIBUTE_VALUE_BEGIN: 8,
   ATTRIBUTE_VALUE: 9,
+  COMMENT: 10,
 };
 
 const ACTIONS = {
@@ -19,10 +20,12 @@ const ACTIONS = {
   quote: 'action-quote',
   slash: 'action-slash',
   char: 'action-char',
+  bang: 'action-bang'
 };
 
 const TYPES = {
   text: 'text',
+  comment: 'comment',
   openTag: 'open-tag',
   closeTag: 'close-tag',
   attributeName: 'attribute-name',
@@ -40,6 +43,7 @@ const charToAction = {
   "'": ACTIONS.quote,
   '=': ACTIONS.equal,
   '/': ACTIONS.slash,
+  '!': ACTIONS.bang,
 };
 
 const noop = () => {};
@@ -50,6 +54,7 @@ module.exports = emit => {
   var attrValue = '';
   var isClosing = false;
   var openingQuote = '';
+  var comment = '';
   var state = STATES.DATA;
   const stateMachine = {
     [STATES.DATA]: {
@@ -77,6 +82,10 @@ module.exports = emit => {
     },
     [STATES.TAG_OPEN]: {
       [ACTIONS.space]: noop,
+      [ACTIONS.bang]: () => {
+        comment = '';
+        state = STATES.COMMENT;
+      },
       [ACTIONS.char]: (char) => {
         tagName = char;
         state = STATES.TAG_NAME;
@@ -85,6 +94,17 @@ module.exports = emit => {
         tagName = '';
         isClosing = true;
       },
+    },
+    [STATES.COMMENT]: {
+      [ACTIONS.char]: char => {
+        comment += char;
+      },
+      [ACTIONS.gt]: () => {
+        if(/^--(.+)--$/.test(comment)){
+          emit(TYPES.comment, RegExp.$1);
+          state = STATES.DATA;
+        }
+      }
     },
     [STATES.TAG_NAME]: {
       [ACTIONS.space]: () => {
