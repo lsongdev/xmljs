@@ -1,0 +1,12 @@
+<body>
+  
+</body>
+<script src="/dist/xml2.js"></script>
+<script>
+
+  const read = xml2.createReader(node => {
+    console.log(node);
+  });
+
+  read(document.body.outerHTML);
+</script>

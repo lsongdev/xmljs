@@ -100,7 +100,7 @@ module.exports = emit => {
         comment += char;
       },
       [ACTIONS.gt]: () => {
-        if(/^--(.+)--$/.test(comment)){
+        if(/^--(.+)--$/s.test(comment)){
           emit(TYPES.comment, RegExp.$1);
           state = STATES.DATA;
         }

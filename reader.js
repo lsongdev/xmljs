@@ -5,7 +5,7 @@ const createNode = node => Object.assign({
   children: []
 }, node);
 
-module.exports = done => {
+const reader = done => {
   var current, attrname;
   return parser((type, value) => {
     switch(type){
@@ -40,3 +40,6 @@ module.exports = done => {
     }
   });
 };
+
+reader.parser = parser;
+module.exports = reader;

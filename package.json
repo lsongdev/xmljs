@@ -1,13 +1,11 @@
 {
   "name": "xml2",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "simple xml reader and parser",
   "main": "index.js",
-  "directories": {
-    "example": "example"
-  },
+  "browser": "browser.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rollup -c"
   },
   "repository": {
     "type": "git",
@@ -24,5 +22,13 @@
   "bugs": {
     "url": "https://github.com/song940/xmljs/issues"
   },
-  "homepage": "https://github.com/song940/xmljs#readme"
+  "homepage": "https://github.com/song940/xmljs#readme",
+  "devDependencies": {
+    "rollup": "^0.68.2",
+    "@babel/core": "7",
+    "@babel/preset-env": "^7.2.3",
+    "rollup-plugin-babel": "^4.1.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0"
+  }
 }
