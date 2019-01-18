@@ -3,7 +3,6 @@ const serializeAttrs = attrs => {
   return Object.keys(attrs).reduce((str, key) => {
     str += ' ' + key;
     const value = attrs[key];
-    console.log(key, value);
     if(value !== void(0)){
       str += `="${value}"`;
     }

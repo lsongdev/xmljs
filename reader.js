@@ -8,7 +8,6 @@ const createNode = node => Object.assign({
 const reader = done => {
   var current, attrname;
   return parser((type, value) => {
-    console.log(type, value);
     switch(type){
       case 'open-tag':
         const node = createNode({ 
@@ -29,7 +28,8 @@ const reader = done => {
       case 'text':
         current.children.push(createNode({
           type,
-          value
+          value,
+          parent: current
         }));
         break;
       case 'close-tag':

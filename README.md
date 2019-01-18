@@ -11,9 +11,15 @@ $ npm install xml2
 ### Example
 
 ```js
-const xml2 = require('xml2');
+const XML = require('xml2');
 
-// your code here
+const xml = new XML();
+
+xml.on('open-tag', name => {
+  console.log('tag name: ', name);
+});
+
+fs.createReadStream('/tmp/demo.xml').pipe(xml)
 
 ```
 

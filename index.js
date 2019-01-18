@@ -1,12 +1,12 @@
 const fs = require('fs');
 const { promisify } = require('util');
-const parser = require('./parser');
+const createParser = require('./parser');
 const reader = require('./reader');
 const printer = require('./printer');
 const traverse = require('./traverse');
-const { Transform } = require('stream');
+const EventEmitter = require('events');
 
-class XML extends Transform {
+class XML extends EventEmitter {
   static read(str){
     return new Promise(done => reader(done)(str));
   }
@@ -42,6 +42,19 @@ class XML extends Transform {
   static async transformFile(filename, options){
     const ast = await XML.readFile(filename, options);
     return XML.transform(ast, options);
+  }
+  constructor(){
+    super();
+    this._write = createParser((type, value) => 
+      this.emit(type, value));
+  }
+  write(buf){
+    this._write(buf.toString());
+    return this;
+  }
+  end(buf){
+    buf && this._write(buf.toString());
+    return this;
   }
 }
 

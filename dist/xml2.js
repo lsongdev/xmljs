@@ -107,7 +107,7 @@
     }), _STATES$TAG_OPEN)), _defineProperty(_stateMachine, STATES.COMMENT, (_STATES$COMMENT = {}, _defineProperty(_STATES$COMMENT, ACTIONS.char, function (char) {
       comment += char;
     }), _defineProperty(_STATES$COMMENT, ACTIONS.gt, function () {
-      if (/^--(.+)--$/.test(comment)) {
+      if (/^\x2D\x2D([\0-\uFFFF]+)\x2D\x2D$/.test(comment)) {
         emit(TYPES.comment, RegExp.$1);
         state = STATES.DATA;
       }
@@ -152,6 +152,7 @@
       isClosing = true;
       state = STATES.TAG_END;
     }), _STATES$ATTRIBUTE_NAM)), _defineProperty(_stateMachine, STATES.ATTRIBUTE_NAME, (_STATES$ATTRIBUTE_NAM2 = {}, _defineProperty(_STATES$ATTRIBUTE_NAM2, ACTIONS.space, function () {
+      emit(TYPES.attributeName, attrName);
       state = STATES.ATTRIBUTE_NAME_END;
     }), _defineProperty(_STATES$ATTRIBUTE_NAM2, ACTIONS.equal, function () {
       emit(TYPES.attributeName, attrName);
@@ -171,18 +172,13 @@
     }), _defineProperty(_STATES$ATTRIBUTE_NAM2, ACTIONS.char, function (char) {
       attrName += char;
     }), _STATES$ATTRIBUTE_NAM2)), _defineProperty(_stateMachine, STATES.ATTRIBUTE_NAME_END, (_STATES$ATTRIBUTE_NAM3 = {}, _defineProperty(_STATES$ATTRIBUTE_NAM3, ACTIONS.space, noop), _defineProperty(_STATES$ATTRIBUTE_NAM3, ACTIONS.equal, function () {
-      emit(TYPES.attributeName, attrName);
       state = STATES.ATTRIBUTE_VALUE_BEGIN;
     }), _defineProperty(_STATES$ATTRIBUTE_NAM3, ACTIONS.gt, function () {
       attrValue = '';
-      emit(TYPES.attributeName, attrName);
-      emit(TYPES.attributeValue, attrValue);
       data = '';
       state = STATES.DATA;
     }), _defineProperty(_STATES$ATTRIBUTE_NAM3, ACTIONS.char, function (char) {
       attrValue = '';
-      emit(TYPES.attributeName, attrName);
-      emit(TYPES.attributeValue, attrValue);
       attrName = char;
       state = STATES.ATTRIBUTE_NAME;
     }), _STATES$ATTRIBUTE_NAM3)), _defineProperty(_stateMachine, STATES.ATTRIBUTE_VALUE_BEGIN, (_STATES$ATTRIBUTE_VAL = {}, _defineProperty(_STATES$ATTRIBUTE_VAL, ACTIONS.space, noop), _defineProperty(_STATES$ATTRIBUTE_VAL, ACTIONS.quote, function (char) {
@@ -254,7 +250,7 @@
       switch (type) {
         case 'open-tag':
           var node = createNode({
-            type: type,
+            type: 'element',
             name: value,
             parent: current
           });
@@ -264,7 +260,7 @@
 
         case 'attribute-name':
           attrname = value;
-          current.attributes[value] = '';
+          current.attributes[value] = void 0;
           break;
 
         case 'attribute-value':
@@ -274,7 +270,8 @@
         case 'text':
           current.children.push(createNode({
             type: type,
-            value: value
+            value: value,
+            parent: current
           }));
           break;
 
