@@ -8,10 +8,11 @@ const createNode = node => Object.assign({
 const reader = done => {
   var current, attrname;
   return parser((type, value) => {
+    console.log(type, value);
     switch(type){
       case 'open-tag':
         const node = createNode({ 
-          type,
+          type: 'element',
           name: value,
           parent: current,
         });
@@ -20,7 +21,7 @@ const reader = done => {
         break;
       case 'attribute-name':
         attrname = value;
-        current.attributes[value] = '';
+        current.attributes[value] = void(0);
         break;
       case 'attribute-value':
         current.attributes[attrname] = value;

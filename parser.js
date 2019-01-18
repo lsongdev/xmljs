@@ -162,6 +162,7 @@ module.exports = emit => {
     },
     [STATES.ATTRIBUTE_NAME]: {
       [ACTIONS.space]: () => {
+        emit(TYPES.attributeName, attrName);
         state = STATES.ATTRIBUTE_NAME_END;
       },
       [ACTIONS.equal]: () => {
@@ -189,20 +190,15 @@ module.exports = emit => {
     [STATES.ATTRIBUTE_NAME_END]: {
       [ACTIONS.space]: noop,
       [ACTIONS.equal]: () => {
-        emit(TYPES.attributeName, attrName);
         state = STATES.ATTRIBUTE_VALUE_BEGIN;
       },
       [ACTIONS.gt]: () => {
         attrValue = '';
-        emit(TYPES.attributeName, attrName);
-        emit(TYPES.attributeValue, attrValue);
         data = '';
         state = STATES.DATA;
       },
       [ACTIONS.char]: (char) => {
         attrValue = '';
-        emit(TYPES.attributeName, attrName);
-        emit(TYPES.attributeValue, attrValue);
         attrName = char;
         state = STATES.ATTRIBUTE_NAME;
       },
