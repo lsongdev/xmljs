@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+
+const xml = require('..');
+
+const [ name, fn ] = process.argv.slice(2);
+
+const d = [];
+process.stdin
+.on('data', d.push.bind(d))
+.on('end', async () => {
+  let data = await xml.read(d.join(''));
+  if(name){
+    if(name === '-e' && fn){
+      data = eval(`(${fn})(data)`);
+    }else{
+      data = data[name];
+    }
+  }
+  try{
+    console.log(data);
+    process.exit(0);
+  }catch(e){
+    console.error(e);
+    process.exit(-1);
+  }
+})

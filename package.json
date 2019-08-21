@@ -1,12 +1,13 @@
 {
   "name": "xml2",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "simple xml reader and parser",
   "main": "index.js",
   "browser": "browser.js",
   "scripts": {
     "build": "rollup -c"
   },
+  "bin": "./bin/xml2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/song940/xmljs.git"

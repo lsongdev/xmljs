@@ -8,13 +8,13 @@ const EventEmitter = require('events');
 
 class XML extends EventEmitter {
   static read(str){
-    return new Promise(done => reader(done)(str));
+    return new Promise(done => reader(done)(`<root>${str}</root>`))
+      .then(root => root.children);
   }
   static async readFile(filename, options = {}){
     const readFile = promisify(fs.readFile);
     const source = await readFile(filename, 'utf8');
-    const ast = await XML.read(`<root>${source}</root>`, options);
-    return ast.children;
+    return XML.read(source, options);
   }
   static serialize(ast, options){
     return printer(ast, options);

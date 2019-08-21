@@ -20,7 +20,8 @@ const ACTIONS = {
   quote: 'action-quote',
   slash: 'action-slash',
   char: 'action-char',
-  bang: 'action-bang'
+  bang: 'action-bang',
+  question: 'action-question'
 };
 
 const TYPES = {
@@ -44,6 +45,7 @@ const charToAction = {
   '=': ACTIONS.equal,
   '/': ACTIONS.slash,
   '!': ACTIONS.bang,
+  '?': ACTIONS.question,
 };
 
 const noop = () => {};
@@ -155,6 +157,10 @@ module.exports = emit => {
         state = STATES.DATA;
       },
       [ACTIONS.space]: noop,
+      [ACTIONS.question]: () => {
+        isClosing = true;
+        state = STATES.TAG_END;
+      },
       [ACTIONS.slash]: () => {
         isClosing = true;
         state = STATES.TAG_END;
